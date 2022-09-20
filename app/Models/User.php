@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
+
 use function Termwind\renderUsing;
 
 class User extends Authenticatable
 {
+
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -27,6 +30,7 @@ class User extends Authenticatable
         'role_id'
     ];
 
+    public $timestamps=false;
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -38,7 +42,7 @@ class User extends Authenticatable
     ];
 
     public function role(){
-        return $this->hasOne('Role','id','role_id');
+        return $this->belongsTo(Role::class,'role_id');
     }
     private function checkIfUserRole($need_role){
         return  (strtolower($need_role)==strtolower($this->role->name))? true :null;

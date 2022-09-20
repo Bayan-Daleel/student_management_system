@@ -3,34 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
     use AuthenticatesUsers;
-    protected $username ='username';
-    protected $redirectTo ='/home';
-    protected $guard ='web';
+    protected $username = 'username';
+    protected $redirectTo = '/dashboard';
+    protected $guard = 'web';
 
     public function getLogin(){
-        if ( Auth::guard('web')->check()){
+        if (Auth::guard('web')->check()) {
             return redirect()->route('dashboard');
         }
+
         return view('login');
-    }
-    public function postLogin( Request $request){
-        $auth=Auth::guard('web')->attempt(
-            ['username'=>$request->username,
-                'password'=>$request->password,'active'=>1]);
-   if ($auth){
-       return redirect()->route('dashboard');
-   }
-       return redirect()->route('/');
+
     }
 
-    public function getLogout(){
-       Auth::guard('web')->logout();
-       return redirect()->route('/');
+    public function postLogin(Request $request)
+    {
+        $auth =Auth::guard('web')->attempt(['username'=>$request->username,'password'=> $request->password,'active'=>1]);
+        if ($auth) {
+            return redirect('/dashboard');
+
+        }
+        return redirect('/');
+
+    }
+    public function getLogout()
+    {
+        Auth::guard('web')->logout();
+        return redirect('/');
+
     }
 }

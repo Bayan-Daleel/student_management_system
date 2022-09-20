@@ -23,7 +23,6 @@ return new class extends Migration
             $table->foreign('class_id')
                 ->references('class_id')
                 ->on('classes');
-
         });
     }
 
